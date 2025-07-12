@@ -1,4 +1,5 @@
 ### Retreive all attributes and display with the command
 
-# all_book = Book.objects.all()
-# all_book
+Book.objects.get(title="1984")
+
+### Display the value of the object with title 1949
