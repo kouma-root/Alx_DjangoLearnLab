@@ -2,10 +2,8 @@
 
 # from bookshelf.models import Book
 
-### create a new object new_book and save it with the following command
+### create a  new_book  with the following command
 
-# new_book = Book(title="1984", author= "George Orwell", publication_year=1949)
-
-# new_book.save()
+Book.objects.create(title="1984", author= "George Orwell", publication_year=1949)
 
 ## The new object is saved in the DB succesfully
