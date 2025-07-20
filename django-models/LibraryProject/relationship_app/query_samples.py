@@ -11,4 +11,4 @@ books = Book.objects.filter(author=author)
 
 
 library = Library.objects.get(name=library_name)
-librarian = library.objects.get(Library__name = library_name)
+librarian = Librarian.objects.get(Library__name = library_name)
