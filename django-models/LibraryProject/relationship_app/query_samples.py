@@ -4,6 +4,11 @@ from .models import Author, Book, Librarian, Library
 library_name = 'NITT Lybrary'
 library = Library.objects.get(name=library_name)
 books =library.books.all()
-library_book = Book.objects.get(library='Kouma')
 
-librarian = Librarian.objects.get(library='kouma')
+author_name = "John Doe"
+author = Author.objects.get(name=author_name)
+books = Book.objects.filter(author=author)
+
+
+library = Library.objects.get(name=library_name)
+librarian = library.objects.get(Library__name = library_name)
