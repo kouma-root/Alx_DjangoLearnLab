@@ -4,10 +4,10 @@ from django.views.generic import DetailView
 from .models import Book, Library
 # Create your views here.
 
-def book_list(request):
+def list_book(request):
     books = Book.objects.all()
-    context = {'book_list': books}
-    return render(request, 'book/book_list.html', context)
+    context = {'list_book': books}
+    return render(request, 'relationship_app/List_book.html', context)
 
 class library_detail(DetailView):
     model = Library
