@@ -23,5 +23,7 @@ class LibraryDetailView(DetailView):
         context['books'] = self.get_object() # Access related books
         return context
     
-def register(request):
-    return render(request, 'relationship_app/register.html')
+class register(CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy('login')
+    template_name= 'relationship_app/register.html'
