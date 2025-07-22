@@ -52,8 +52,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'LibraryProject.urls'
-LOGIN_REDIRECT_URL = 'relationship_app/signup'
-LOGOUT_REDIRECT_URL = 'relationship_app/signup'
+LOGIN_REDIRECT_URL = 'relationship_app/logout'
+LOGOUT_REDIRECT_URL = 'relationship_app/logout'
 
 TEMPLATES = [
     {
