@@ -5,7 +5,7 @@ from django.views.generic import TemplateView, CreateView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.urls import reverse_lazy
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import permission_required,login_required, user_passes_test
 from .utils import is_admin, is_librarian, is_member
 from .models import Book
 from .models import Library
@@ -50,3 +50,19 @@ def librarian_view(request):
 @user_passes_test(is_member)
 def member_view(request):
     return render(request, 'relationship_app/member_view.html')
+
+@login_required
+@permission_required('relationship_app.can_add_book', raise_exception=True)
+def add_book(request):
+    return render(request, 'relationship_app/book_form.html')
+
+
+@login_required
+@permission_required('relationship_app.can_achange_book', raise_exception=True)
+def update_book(request, pk):
+    return render(request, 'relationship_app/book_form.html')
+
+@login_required
+@permission_required('relationship_app.can_delete_book', raise_exception=True)
+def delete_book(request, pk):
+    return render(request, 'relationship_app/book_form.html')
