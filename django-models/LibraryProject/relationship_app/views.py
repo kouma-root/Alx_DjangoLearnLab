@@ -58,7 +58,7 @@ def add_book(request):
 
 
 @login_required
-@permission_required('relationship_app.can_achange_book', raise_exception=True)
+@permission_required('relationship_app.can_change_book', raise_exception=True)
 def update_book(request, pk):
     return render(request, 'relationship_app/book_form.html')
 
