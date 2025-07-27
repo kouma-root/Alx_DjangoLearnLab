@@ -37,3 +37,33 @@ We use `@permission_required()` in views to restrict access:
 @permission_required('yourapp.can_edit', raise_exception=True)
 def edit_article(request, pk):
     ...
+
+
+# Security Overview
+
+## 1. Permissions and Groups
+- Custom permissions: `can_view`, `can_create`, `can_edit`, `can_delete`
+- Groups: `Viewers`, `Editors`, `Admins`
+- Each view checks required permissions using `@permission_required`.
+
+## 2. Middleware & CSP
+- Custom middleware sets the `Content-Security-Policy` header to restrict content to trusted sources.
+
+## 3. Settings
+- `DEBUG = False` for production
+- Enabled XSS filter, content type nosniff, and secure cookies
+- Cookies (`CSRF_COOKIE_SECURE` and `SESSION_COOKIE_SECURE`) are only sent over HTTPS
+
+## 4. CSRF
+- All forms use `{% csrf_token %}` in templates
+
+## 5. ORM Safety
+- All user input is processed through Django's ORM or forms
+- No raw SQL queries are used
+
+## 6. Testing
+- Manual testing for:
+  - CSRF tokens present in forms
+  - Safe query handling
+  - Permission enforcement
+  - CSP header presence
