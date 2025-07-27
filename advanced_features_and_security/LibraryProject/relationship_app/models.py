@@ -1,6 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, BaseUserManager
-from .managers import CustomUserManager
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 # Create your models here.
 class Author(models.Model):
     name = models.CharField(max_length=200)
@@ -37,16 +39,14 @@ class Librarian(models.Model):
     def __str__(self) -> str:
         return f"({self.name} , {self.library})"
     
-class CustomUser(AbstractUser):
-    username = None
-    email = models.EmailField(unique=True)
-    date_of_birth = models.DateField(null=True, blank=True)
-    profile_picture = models.ImageField(upload_to='profiles/', null=True, blank= True)
+    
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete= models.CASCADE)
     role = models.CharField(max_length=20, choices=[('admin','Admin'),('librarian','Librarian'),('member','Member')], default='member')
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name', 'date_of_birth', 'role']
 
-    objects = CustomUserManager()
-   
-    def __str__(self):
-       return self.email
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created :
+        UserProfile.objects.create(user = instance)
+    else :
+        instance.userprofile.save()
