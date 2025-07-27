@@ -1,0 +1,16 @@
+<h2>All Articles</h2>
+{% for article in articles %}
+  <h3>{{ article.title }}</h3>
+  <p>{{ article.content }}</p>
+
+  {% if perms.yourapp.can_edit %}
+    <a href="{% url 'edit_article' article.pk %}">Edit</a>
+  {% endif %}
+  {% if perms.yourapp.can_delete %}
+    <a href="{% url 'delete_article' article.pk %}">Delete</a>
+  {% endif %}
+{% endfor %}
+
+{% if perms.yourapp.can_create %}
+  <a href="{% url 'create_article' %}">Create New Article</a>
+{% endif %}
