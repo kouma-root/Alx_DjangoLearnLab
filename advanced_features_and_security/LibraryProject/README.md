@@ -1,0 +1,1 @@
+Our first ALX django project succesfully implemented
