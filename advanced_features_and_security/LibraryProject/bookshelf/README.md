@@ -67,3 +67,17 @@ def edit_article(request, pk):
   - Safe query handling
   - Permission enforcement
   - CSP header presence
+
+
+  ## 🔐 1. Manual Django Security Settings (`settings.py`)
+
+The following changes were **manually applied** in `settings.py` to secure the application:
+
+### ✅ Basic Security
+
+```python
+# Never run with DEBUG = True in production
+DEBUG = False
+
+# Only allow known domains
+ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com']
