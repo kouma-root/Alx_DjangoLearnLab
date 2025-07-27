@@ -14,3 +14,9 @@ class BookForms(forms.ModelForm):
         
 class SearchForm(forms.Form):
     query = forms.CharField(max_length=100, required=True)
+    
+
+class ExampleForm(forms.Form):
+    class Meta:
+        model = Book
+        fields = ['title', 'author', 'publication_year']
