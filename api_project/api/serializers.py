@@ -1,8 +1,8 @@
-from rest_framework.serializers import ModelSerializer
+import rest_framework.serializers
 from .models import Book
 
 
-class BookSerializer(ModelSerializer):
+class BookSerializer(rest_framework.serializers.ModelSerializer):
     
     class Meta:
         model = Book
