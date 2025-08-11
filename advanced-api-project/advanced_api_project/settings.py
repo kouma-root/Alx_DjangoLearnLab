@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'django_filters',
     'api',
 ]
 
@@ -55,7 +56,9 @@ ROOT_URLCONF = 'advanced_api_project.urls'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
+        'django_filters.rest_framework.DjangoFilterBackend',  # Filtering
+        'rest_framework.filters.SearchFilter',                # Search
+        'rest_framework.filters.OrderingFilter',   
     ]
 }
 

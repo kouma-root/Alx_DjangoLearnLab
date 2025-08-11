@@ -12,3 +12,21 @@ Endpoints:
 Permissions:
 - Read operations are open to everyone.
 - Create, update, delete operations require authentication.
+
+
+## Filtering, Searching, and Ordering
+
+You can filter, search, and order books using query parameters:
+
+### Filtering:
+- /api/books/?title=BookTitle
+- /api/books/?publication_year=2020
+- /api/books/?author=1
+
+### Searching:
+- /api/books/?search=Python
+- /api/books/?search=Austen
+
+### Ordering:
+- /api/books/?ordering=title
+- /api/books/?ordering=-publication_year
