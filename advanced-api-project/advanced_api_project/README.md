@@ -30,3 +30,17 @@ You can filter, search, and order books using query parameters:
 ### Ordering:
 - /api/books/?ordering=title
 - /api/books/?ordering=-publication_year
+
+
+# Testing Strategy
+
+We use Django's built-in test framework with APITestCase from DRF.
+
+Tests cover:
+- CRUD endpoints for the Book model
+- Filtering by publication_year
+- Searching by title and author's name
+- Ordering by title and publication_year
+- Permission checks (authenticated vs unauthenticated)
+
+Run tests:
