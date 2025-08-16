@@ -8,6 +8,10 @@
 <body>
     <h1>Blog Posts</h1>
     {% if user.is_authenticated %}
+    <form method="get" action="{% url 'search_posts' %}">
+    <input type="text" name="q" placeholder="Search posts...">
+    <button type="submit">Search</button>
+    </form>
         <a href="{% url 'post-create' %}">+ New Post</a>
     {% endif %}
     <ul>

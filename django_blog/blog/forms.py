@@ -1,6 +1,16 @@
 from django import forms
-from .models import Comment
+from .models import Comment, Post
 
+
+from django import forms
+from .models import Post
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['title', 'content', 'tags']
+        
+        
 class CommentForm(forms.ModelForm):
     content = forms.CharField(label='', widget=forms.Textarea(attrs={'rows': 3, 'placeholder': 'Write your comment…'}), max_length=2000, help_text="Max 2000 characters.")
 
