@@ -1,0 +1,18 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Profile</title>
+    <link rel="stylesheet" href="{% static 'blog/css/style.css' %}">
+</head>
+<body>
+    <h2>Welcome, {{ user.username }}!</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label>Email:</label>
+        <input type="email" name="email" value="{{ user.email }}">
+        <button type="submit">Update</button>
+    </form>
+    <p><a href="{% url 'logout' %}">Logout</a></p>
+</body>
+</html>
