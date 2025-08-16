@@ -1,17 +1,54 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>{{ post.title }}</title>
+    <link rel="stylesheet" href="{% static 'blog/css/style.css' %}">
 </head>
 <body>
     <h2>{{ post.title }}</h2>
-    <p>{{ post.content }}</p>
+    <p>{{ post.content|linebreaks }}</p>
     <p><em>By {{ post.author }} on {{ post.created_at }}</em></p>
 
-    {% if user == post.author %}
-        <a href="{% url 'post-update' post.pk %}">Edit</a>
-        <a href="{% url 'post-delete' post.pk %}">Delete</a>
-    {% endif %}
     <p><a href="{% url 'post-list' %}">Back to list</a></p>
+
+    <hr>
+
+    <h3>Comments ({{ post.comments.count }})</h3>
+    <div id="comments">
+        {% for comment in comments %}
+            <article id="comment-{{ comment.pk }}" class="comment">
+                <header>
+                    <strong>{{ comment.author.username }}</strong>
+                    <span> • {{ comment.created_at|date:"Y-m-d H:i" }}</span>
+                    {% if comment.updated_at and comment.updated_at|date:"U" != comment.created_at|date:"U" %}
+                        <em>(edited)</em>
+                    {% endif %}
+                </header>
+                <p>{{ comment.content|linebreaks }}</p>
+                {% if user == comment.author %}
+                    <div class="comment-actions">
+                        <a href="{% url 'comment-update' comment.pk %}">Edit</a>
+                        <a href="{% url 'comment-delete' comment.pk %}">Delete</a>
+                    </div>
+                {% endif %}
+            </article>
+        {% empty %}
+            <p>No comments yet. Be the first!</p>
+        {% endfor %}
+    </div>
+
+    <hr>
+
+    {% if user.is_authenticated %}
+        <h4>Add a comment</h4>
+        <form method="post" action="{% url 'comment-create' post.pk %}">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <button type="submit">Post Comment</button>
+        </form>
+    {% else %}
+        <p><a href="{% url 'login' %}?next={{ request.path }}">Log in</a> to comment.</p>
+    {% endif %}
 </body>
 </html>

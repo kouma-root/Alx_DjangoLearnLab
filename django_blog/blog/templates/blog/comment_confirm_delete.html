@@ -1,0 +1,17 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delete comment</title>
+    <link rel="stylesheet" href="{% static 'blog/css/style.css' %}">
+</head>
+<body>
+    <h2>Delete this comment?</h2>
+    <blockquote>{{ object.content|linebreaks }}</blockquote>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Yes, delete</button>
+        <a href="{% url 'post-detail' object.post.pk %}">Cancel</a>
+    </form>
+</body>
+</html>
