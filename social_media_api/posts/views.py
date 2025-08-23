@@ -43,8 +43,8 @@ class FeedView(generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         # Get all the users that the current user follows
-        following_users = Follow.objects.filter(follower=request.user).values_list("following", flat=True)
-
+        following_users = request.user.following.all()
+        
         posts = Post.objects.filter(author__in=following_users).order_by("-created_at")
 
         # Return simple JSON (or use serializer if you already have one)
