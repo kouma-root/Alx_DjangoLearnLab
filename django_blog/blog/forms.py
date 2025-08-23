@@ -1,10 +1,7 @@
 from django import forms
 from .models import Comment, Post
 from taggit.forms import TagWidget
-
-
 from django import forms
-from .models import Post
 
 class PostForm(forms.ModelForm):
     class Meta:
