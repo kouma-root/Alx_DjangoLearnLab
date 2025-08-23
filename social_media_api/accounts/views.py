@@ -2,7 +2,6 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import get_user_model
 from .serializers import UserRegistrationSerializer, UserLoginSerializer, UserProfileSerializer
@@ -17,12 +16,9 @@ def register_user(request):
     if serializer.is_valid():
         user = serializer.save()
         
-        # Use Token.objects.create() as required by checker
-        token = Token.objects.create(user=user)
-        
         return Response({
             'message': 'User registered successfully',
-            'token': token.key,
+            'token': user.token,  # Token is now created in serializer
             'user': {
                 'id': user.id,
                 'username': user.username,
@@ -40,16 +36,14 @@ def user_login(request):
     
     if serializer.is_valid():
         user = serializer.validated_data['user']
+        token = serializer.validated_data['token']
         
         # Optional: Use Django's login for session authentication
         login(request, user)
         
-        # Get or create token - use create if it doesn't exist
-        token, created = Token.objects.get_or_create(user=user)
-        
         return Response({
             'message': 'Login successful',
-            'token': token.key,
+            'token': token,
             'user': {
                 'id': user.id,
                 'username': user.username,

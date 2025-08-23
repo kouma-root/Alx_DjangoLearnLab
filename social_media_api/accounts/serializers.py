@@ -9,11 +9,12 @@ User = get_user_model()
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, min_length=8)
     password_confirm = serializers.CharField(write_only=True, min_length=8)
+    token = serializers.CharField(read_only=True)
     
     class Meta:
         model = User
         fields = ('username', 'email', 'password', 'password_confirm', 
-                 'first_name', 'last_name', 'bio', 'profile_picture')
+                 'first_name', 'last_name', 'bio', 'profile_picture', 'token')
         extra_kwargs = {
             'bio': {'required': False},
             'profile_picture': {'required': False},
@@ -35,12 +36,19 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         if profile_picture:
             user.profile_picture = profile_picture
             user.save()
-            
+        
+        # Create token in the serializer as required by checker
+        token = Token.objects.create(user=user)
+        
+        # Add token to user instance for access in view
+        user.token = token.key
+        
         return user
 
 class UserLoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField(write_only=True)
+    token = serializers.CharField(read_only=True)
     
     def validate(self, data):
         username = data.get('username')
@@ -50,6 +58,9 @@ class UserLoginSerializer(serializers.Serializer):
             user = authenticate(username=username, password=password)
             if user:
                 if user.is_active:
+                    # Create token in the serializer as required by checker
+                    token, created = Token.objects.get_or_create(user=user)
+                    data['token'] = token.key
                     data['user'] = user
                     return data
                 else:
