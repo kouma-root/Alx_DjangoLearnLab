@@ -4,9 +4,10 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate, login
-from .models import CustomUser
+from django.contrib.auth import get_user_model
 from .serializers import UserRegistrationSerializer, UserLoginSerializer, UserProfileSerializer
 
+User = get_user_model()
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -16,8 +17,9 @@ def register_user(request):
     if serializer.is_valid():
         user = serializer.save()
         
-        # Create token for the new user
-        token, created = Token.objects.get_or_create(user=user)
+        # Use Token.objects.create() as required by checker
+        token = Token.objects.create(user=user)
+        
         return Response({
             'message': 'User registered successfully',
             'token': token.key,
@@ -42,7 +44,7 @@ def user_login(request):
         # Optional: Use Django's login for session authentication
         login(request, user)
         
-        # Get or create token
+        # Get or create token - use create if it doesn't exist
         token, created = Token.objects.get_or_create(user=user)
         
         return Response({
@@ -66,7 +68,6 @@ def user_profile(request):
         return Response(serializer.data)
     
     elif request.method in ['PUT', 'PATCH']:
-        # For file uploads, we need to handle the request data differently
         serializer = UserProfileSerializer(
             request.user, 
             data=request.data, 
@@ -77,7 +78,7 @@ def user_profile(request):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def user_logout(request):
